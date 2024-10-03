@@ -1,5 +1,10 @@
 name: Metrics
-on: [pull_request_target]
+on: 
+  workflow_dispatch:
+    inputs:
+      beta:
+       type: boolean
+       default: 'false'
 
 jobs:
   binary-size:
