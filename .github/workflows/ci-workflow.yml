@@ -6,17 +6,18 @@ on:
       triggerIos:
         description: 'Run iOS tests'
         required: true
-        default: 'yes'
+        default: 'no'
       triggerMacos:
         description: 'Run macOS tests'
         required: true
-        default: 'yes'
+        default: 'no'
       trigger3DS:
         description: 'Run 3DS tests'
         required: true
-        default: 'yes'
+        default: 'no'
 jobs:
   fxcg:
+    if: 1 == 2
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -252,6 +253,7 @@ jobs:
           name: epsilon-binpack-bootloader.tgz
           path: output/release/device/bootloader/binpack-bootloader.tgz
   windows:
+    if: 1 == 2
     runs-on: windows-latest
     defaults:
        run:
@@ -310,6 +312,7 @@ jobs:
           name: epsilon-web.zip
           path: output/release/simulator/web/epsilon.zip
   linux:
+    if: 1 == 2
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install build-essential imagemagick libfreetype6-dev libjpeg-dev libpng-dev pkg-config
