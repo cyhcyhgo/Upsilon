@@ -1,5 +1,10 @@
 name: Docker Image CI
-on: [pull_request, push]
+on: 
+  workflow_dispatch:
+    inputs:
+      beta:
+       type: boolean
+       default: 'false'
 
 jobs:
   docker:
