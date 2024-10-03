@@ -35,7 +35,7 @@ public:
   KDColor invert() const { return KDColor(~m_value); }
   operator uint16_t() const { return m_value; }
 private:
-  constexpr static uint16_t GrayScale(uint16_t rgb565) {
+  inline static uint16_t GrayScale(uint16_t rgb565) {
     // 提取 RGB 各分量
     uint8_t r5 = (rgb565 >> 11) & 0x1F;  // 5 位红色
     uint8_t g6 = (rgb565 >> 5) & 0x3F;   // 6 位绿色
