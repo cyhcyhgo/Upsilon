@@ -35,27 +35,10 @@ public:
   KDColor invert() const { return KDColor(~m_value); }
   operator uint16_t() const { return m_value; }
 private:
-  inline static uint16_t GrayScale(uint16_t rgb565) {
-    // 提取 RGB 各分量
-    uint8_t r5 = (rgb565 >> 11) & 0x1F;  // 5 位红色
-    uint8_t g6 = (rgb565 >> 5) & 0x3F;   // 6 位绿色
-    uint8_t b5 = rgb565 & 0x1F;          // 5 位蓝色
-
-    // 将 RGB565 转换为 RGB888 格式
-    uint8_t r = (r5 << 3) | (r5 >> 2);   // 5 位转 8 位 (移位)
-    uint8_t g = (g6 << 2) | (g6 >> 4);   // 6 位转 8 位 (移位)
-    uint8_t b = (b5 << 3) | (b5 >> 2);   // 5 位转 8 位 (移位)
-
-    // 使用加权平均法计算灰度值
-    uint8_t gray = (r * 76 + g * 150 + b * 29) >> 8;
-
-    // 将灰度值转换回 RGB565 格式
-    uint8_t grayR5 = (gray >> 3) & 0x1F;  // 8 位转 5 位
-    uint8_t grayG6 = (gray >> 2) & 0x3F;  // 8 位转 6 位
-    uint8_t grayB5 = (gray >> 3) & 0x1F;  // 8 位转 5 位
-    uint16_t gray_rgb565 = (grayR5 << 11) | (grayG6 << 5) | grayB5;
-    // 返回灰度值的 RGB565 格式
-    return gray_rgb565;
+  static constexpr uint16_t GrayScale(uint16_t rgb565) {
+    return ((((rgb565 >> 11) & 0x1F) * 76 + ((rgb565 >> 5) & 0x3F) * 150 + (rgb565 & 0x1F) * 29) >> 8 & 0xF8) << 8 |
+           ((((rgb565 >> 11) & 0x1F) * 76 + ((rgb565 >> 5) & 0x3F) * 150 + (rgb565 & 0x1F) * 29) >> 8 & 0xFC) << 3 |
+           ((((rgb565 >> 11) & 0x1F) * 76 + ((rgb565 >> 5) & 0x3F) * 150 + (rgb565 & 0x1F) * 29) >> 8) >> 3;
   }
   constexpr KDColor(uint16_t value) : m_value(GrayScale(value)) {}
   uint16_t m_value;
