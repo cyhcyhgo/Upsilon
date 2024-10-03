@@ -184,7 +184,16 @@ void generateImplementationFromImage(FILE * file, const char * header, const cha
       uint8_t intRed = blendedRed*0xFF;
       uint8_t intGreen = blendedGreen*0xFF;
       uint8_t intBlue = blendedBlue*0xFF;
-      uint16_t rgb565value = (intRed>>3)<<11 | (intGreen>>2) << 5 | (intBlue>>3);
+      // 使用加权平均法计算灰度值
+      uint8_t gray = (intRed * 76 + intGreen * 150 + intBlue * 29) >> 8;
+
+      // 将灰度值转换回 RGB565 格式
+      uint8_t grayR5 = (gray >> 3) & 0x1F;  // 8 位转 5 位
+      uint8_t grayG6 = (gray >> 2) & 0x3F;  // 8 位转 6 位
+      uint8_t grayB5 = (gray >> 3) & 0x1F;  // 8 位转 5 位
+
+      uint16_t rgb565value =
+          (grayR5 << 11) | (grayG6 << 5) | grayB5;
       pixelBuffer[j*width+i] = rgb565value;
     }
   }
